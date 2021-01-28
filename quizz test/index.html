@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quizz test</title>
-    <link rel="stylesheet" href="resources/styles.css">
-</head>
-<body>  
 
-<div class="quiz-container">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quizz test</title>
+  <link rel="stylesheet" href="resources/styles.css">
+
+
+</head>
+
+<body>
+
+  <div class="quiz-container">
     <div id="quiz"></div>
   </div>
   <button id="previous">Previous Question</button>
-  <button id="next">Next Question</button>
+  <button onclick="move()" id="next">Next Question</button>
   <button id="submit">Submit Quiz</button>
   <div id="results"></div>
+  <span id="pagenumber"> Question 1 of 3</h3>
 
-<script src="js/script.js"></script>
-
+    <script src="js/script.js"></script>
+    <script src="js/progressbar.js"></script>
 
 </body>
+
 </html>
