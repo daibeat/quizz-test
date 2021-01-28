@@ -23,6 +23,7 @@
               ${letter} :
               ${currentQuestion.answers[letter]}
             </label>`
+
           );
         }
 
@@ -39,6 +40,7 @@
     // finally combine our output list into one string of HTML and put it on the page
     quizContainer.innerHTML = output.join('');
   }
+
 
   function showResults() {
 
@@ -62,7 +64,7 @@
         numCorrect++;
 
         // color the answers green
-        answerContainers[questionNumber].style.color = 'lightgreen';
+        answerContainers[questionNumber].style.color = 'green';
       }
       // if answer is wrong or blank
       else {
@@ -74,6 +76,7 @@
     // show number of correct answers out of total
     resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
   }
+
 
   function showSlide(n) {
     slides[currentSlide].classList.remove('active-slide');
@@ -98,11 +101,24 @@
 
   function showNextSlide() {
     showSlide(currentSlide + 1);
+    setPageNumber();
   }
 
   function showPreviousSlide() {
     showSlide(currentSlide - 1);
+    setPageNumber();
   }
+
+  //PAGE INDICATOR 
+
+  function setPageNumber() {
+    var descr = document.getElementById("pagenumber");
+    var selectedquestionindex = currentSlide + 1;/*because Arrays start counting at 0
+*/
+    descr.innerHTML = "Question " + selectedquestionindex + " of " + myQuestions.length;
+
+  }
+
 
   //Variables
   const quizContainer = document.getElementById('quiz');
@@ -116,7 +132,7 @@
       answers: {
         a: "Douglas Crockford",
         b: "Sheryl Sandberg",
-        c: "Brendan Eich"
+        c: "Brendan Eich",
       },
       correctAnswer: "c"
     },
@@ -154,11 +170,15 @@
   showSlide(currentSlide);
 
 
+
   // Event listeners
   submitButton.addEventListener('click', showResults);
   previousButton.addEventListener("click", showPreviousSlide);
   nextButton.addEventListener("click", showNextSlide);
 
+
+
 })();
+
 
 
