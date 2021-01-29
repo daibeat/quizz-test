@@ -111,8 +111,8 @@
   //PAGE INDICATOR 
 
   function setPageNumber() {
-    var descr = document.getElementById("pagenumber");
-    var selectedquestionindex = currentSlide + 1;/*because Arrays start counting at 0*/
+    const descr = document.getElementById("pagenumber");
+    const selectedquestionindex = currentSlide + 1;/*because Arrays start counting at 0*/
     descr.innerHTML = "Question " + selectedquestionindex + " of " + myQuestions.length;
 
   }
