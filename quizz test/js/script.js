@@ -96,25 +96,23 @@
       nextButton.style.display = 'inline-block';
       submitButton.style.display = 'none';
     }
+    setPageNumber();
 
   }
 
   function showNextSlide() {
     showSlide(currentSlide + 1);
-    setPageNumber();
   }
 
   function showPreviousSlide() {
     showSlide(currentSlide - 1);
-    setPageNumber();
   }
 
   //PAGE INDICATOR 
 
   function setPageNumber() {
-    const descr = document.getElementById("pagenumber");
-    let selectedquestionindex = currentSlide + 1;/*because Arrays start counting at 0
-*/
+    var descr = document.getElementById("pagenumber");
+    var selectedquestionindex = currentSlide + 1;/*because Arrays start counting at 0*/
     descr.innerHTML = "Question " + selectedquestionindex + " of " + myQuestions.length;
 
   }
