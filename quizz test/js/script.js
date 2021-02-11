@@ -123,37 +123,19 @@
   const resultsContainer = document.getElementById('results');
   const submitButton = document.getElementById('submit');
 
-  const myQuestions = [
+  function loadJSON(url) {
+    var request = new XMLHttpRequest();
 
-    {
-      question: "Who invented JavaScript?",
-      answers: {
-        a: "Douglas Crockford",
-        b: "Sheryl Sandberg",
-        c: "Brendan Eich",
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "Which one of these is a JavaScript package manager?",
-      answers: {
-        a: "Node.js",
-        b: "TypeScript",
-        c: "npm"
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "Which tool can you use to ensure code quality?",
-      answers: {
-        a: "Angular",
-        b: "jQuery",
-        c: "RequireJS",
-        d: "ESLint"
-      },
-      correctAnswer: "d"
-    }
-  ];
+    request.overrideMimeType("application/json");
+    request.open('GET', url, false);
+    request.send();
+
+    if (request.readyState === 4 && request.status === 200)
+        return JSON.parse(request.responseText);
+  }
+
+  // An example using ipify api (An IP Address API)
+  const myQuestions = loadJSON('https://www.json-generator.com/api/json/get/cfJMtaNoqG?indent=2');
 
   // display quiz right away
   buildQuiz();
