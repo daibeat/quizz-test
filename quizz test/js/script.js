@@ -130,7 +130,7 @@
     Questions("https://www.json-generator.com/api/json/get/cfJMtaNoqG?indent=2")
   );
 
-  console.log(json);
+  console.log(json); 
 
   // display quiz right away
   buildQuiz();
