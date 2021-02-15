@@ -1,58 +1,49 @@
-
+//Immediately Invoke Function Expression (IIFE)
 (function () {
   // Functions
   function buildQuiz() {
-
     // variable to store the HTML output
     const output = [];
 
     // for each question...
-    myQuestions.forEach(
-      (currentQuestion, questionNumber) => {
+    json.forEach((currentQuestion, questionNumber) => {
+      // variable to store the list of possible answers
+      const answers = [];
 
-        // variable to store the list of possible answers
-        const answers = [];
-
-        // and for each available answer...
-        for (letter in currentQuestion.answers) {
-
-          // ...add an HTML radio button
-          answers.push(
-            `<label>
+      // and for each available answer...
+      for (letter in currentQuestion.answers) {
+        // ...add an HTML radio button
+        answers.push(
+          `<label>
               <input type="radio" name="question${questionNumber}" value="${letter}">
               ${letter} :
               ${currentQuestion.answers[letter]}
             </label>`
+        );
+      }
 
-          );
-        }
-
-        // add this question and its answers to the output
-        output.push(
-          `<div class="slide">
+      // add this question and its answers to the output
+      output.push(
+        `<div class="slide">
                 <div class="question"> ${currentQuestion.question} </div>
                 <div class="answers"> ${answers.join("")} </div>
                 </div>`
-        );
-      }
-    );
+      );
+    });
 
     // finally combine our output list into one string of HTML and put it on the page
-    quizContainer.innerHTML = output.join('');
+    quizContainer.innerHTML = output.join("");
   }
 
-
   function showResults() {
-
     // gather answer containers from our quiz
-    const answerContainers = quizContainer.querySelectorAll('.answers');
+    const answerContainers = quizContainer.querySelectorAll(".answers");
 
     // keep track of user's answers
     let numCorrect = 0;
 
     // for each question...
-    myQuestions.forEach((currentQuestion, questionNumber) => {
-
+    json.forEach((currentQuestion, questionNumber) => {
       // find selected answer
       const answerContainer = answerContainers[questionNumber];
       const selector = `input[name=question${questionNumber}]:checked`;
@@ -64,40 +55,39 @@
         numCorrect++;
 
         // color the answers green
-        answerContainers[questionNumber].style.color = 'green';
+        answerContainers[questionNumber].style.color = "green";
       }
       // if answer is wrong or blank
       else {
         // color the answers red
-        answerContainers[questionNumber].style.color = 'red';
+        answerContainers[questionNumber].style.color = "red";
       }
     });
 
     // show number of correct answers out of total
-    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+    resultsContainer.innerHTML = `${numCorrect} out of ${json.length}`;
+
+    //TODO show all questions with the right or wrong answers
   }
 
-
+  //TODO change all the functions to function expressions const
   function showSlide(n) {
-    slides[currentSlide].classList.remove('active-slide');
-    slides[n].classList.add('active-slide');
+    slides[currentSlide].classList.remove("active-slide");
+    slides[n].classList.add("active-slide");
     currentSlide = n;
     if (currentSlide === 0) {
-      previousButton.style.display = 'none';
-    }
-    else {
-      previousButton.style.display = 'inline-block';
+      previousButton.style.display = "none";
+    } else {
+      previousButton.style.display = "inline-block";
     }
     if (currentSlide === slides.length - 1) {
-      nextButton.style.display = 'none';
-      submitButton.style.display = 'inline-block';
-    }
-    else {
-      nextButton.style.display = 'inline-block';
-      submitButton.style.display = 'none';
+      nextButton.style.display = "none";
+      submitButton.style.display = "inline-block";
+    } else {
+      nextButton.style.display = "inline-block";
+      submitButton.style.display = "none";
     }
     setPageNumber();
-
   }
 
   function showNextSlide() {
@@ -108,57 +98,44 @@
     showSlide(currentSlide - 1);
   }
 
-  //PAGE INDICATOR 
+  //PAGE INDICATOR
 
   function setPageNumber() {
     const descr = document.getElementById("pagenumber");
-    const selectedquestionindex = currentSlide + 1;/*because Arrays start counting at 0*/
-    descr.innerHTML = "Question " + selectedquestionindex + " of " + myQuestions.length;
+    const selectedquestionindex =
+      currentSlide + 1; /*because Arrays start counting at 0*/
+    descr.innerHTML =
+      //TODO possible change to template literal?
+      "Question " + selectedquestionindex + " of " + json.length;
+  }
+  //Variables
+  const quizContainer = document.getElementById("quiz");
+  const resultsContainer = document.getElementById("results");
+  const submitButton = document.getElementById("submit");
 
+  //External JSON
+  function Questions(url) {
+    const request = new XMLHttpRequest();
+
+    request.overrideMimeType("application/json");
+    request.open("GET", url, false);
+    request.send();
+
+    if (request.readyState === 4 && request.status === 200)
+      return request.responseText;
   }
 
+  // An example using ipify api (An IP Address API)
+  const json = JSON.parse(
+    Questions("https://www.json-generator.com/api/json/get/cfJMtaNoqG?indent=2")
+  );
 
-  //Variables
-  const quizContainer = document.getElementById('quiz');
-  const resultsContainer = document.getElementById('results');
-  const submitButton = document.getElementById('submit');
-
-  const myQuestions = [
-
-    {
-      question: "Who invented JavaScript?",
-      answers: {
-        a: "Douglas Crockford",
-        b: "Sheryl Sandberg",
-        c: "Brendan Eich",
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "Which one of these is a JavaScript package manager?",
-      answers: {
-        a: "Node.js",
-        b: "TypeScript",
-        c: "npm"
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "Which tool can you use to ensure code quality?",
-      answers: {
-        a: "Angular",
-        b: "jQuery",
-        c: "RequireJS",
-        d: "ESLint"
-      },
-      correctAnswer: "d"
-    }
-  ];
+  console.log(json);
 
   // display quiz right away
   buildQuiz();
 
-  // Pagination
+  // Pagination, next and previous buttons
   const previousButton = document.getElementById("previous");
   const nextButton = document.getElementById("next");
   const slides = document.querySelectorAll(".slide");
@@ -167,16 +144,8 @@
   // Show the first slide
   showSlide(currentSlide);
 
-
-
   // Event listeners
-  submitButton.addEventListener('click', showResults);
+  submitButton.addEventListener("click", showResults);
   previousButton.addEventListener("click", showPreviousSlide);
   nextButton.addEventListener("click", showNextSlide);
-
-
-
 })();
-
-
-
