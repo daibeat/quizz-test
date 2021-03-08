@@ -5,6 +5,14 @@
     // variable to store the HTML output
     const output = [];
 
+    // variable to store the HTML summary output
+    const outputSummary = [];
+
+    /* other way to write the following json.forEach
+    for(let questionNumber = 0; questionNumber < json.length; questionNumber++) {
+      currentQuestion = json[questionNumber]
+    }
+     */
     // for each question...
     json.forEach((currentQuestion, questionNumber) => {
       // variable to store the list of possible answers
@@ -29,15 +37,24 @@
                 <div class="answers"> ${answers.join("")} </div>
                 </div>`
       );
+
+      outputSummary.push(`<li>${currentQuestion.question}</li>`);
     });
+    console.info(outputSummary);
 
     // finally combine our output list into one string of HTML and put it on the page
     quizContainer.innerHTML = output.join("");
+
+    summaryContainer.innerHTML = `<ul>${outputSummary.join("")}</ul>`;
   }
 
   function showResults() {
     // gather answer containers from our quiz
     const answerContainers = quizContainer.querySelectorAll(".answers");
+
+    const elementsSummaryContainer = summaryContainer.getElementsByTagName(
+      "li"
+    );
 
     // keep track of user's answers
     let numCorrect = 0;
@@ -55,22 +72,21 @@
         numCorrect++;
 
         // color the answers green
-        answerContainers[questionNumber].style.color = "green";
+        answerContainers[questionNumber].style.color = "#1dca1d";
+        elementsSummaryContainer[questionNumber].style.color = "#1dca1d";
       }
       // if answer is wrong or blank
       else {
         // color the answers red
         answerContainers[questionNumber].style.color = "red";
+        elementsSummaryContainer[questionNumber].style.color = "red";
       }
     });
 
     // show number of correct answers out of total
     resultsContainer.innerHTML = `${numCorrect} out of ${json.length}`;
-
-    //TODO show all questions with the right or wrong answers
   }
 
-  //TODO change all the functions to function expressions const
   function showSlide(n) {
     slides[currentSlide].classList.remove("active-slide");
     slides[n].classList.add("active-slide");
@@ -87,7 +103,6 @@
       nextButton.style.display = "inline-block";
       submitButton.style.display = "none";
     }
-    setPageNumber();
   }
 
   function showNextSlide() {
@@ -99,17 +114,16 @@
   }
 
   //PAGE INDICATOR
-
   function setPageNumber() {
     const descr = document.getElementById("pagenumber");
     const selectedquestionindex =
       currentSlide + 1; /*because Arrays start counting at 0*/
-    descr.innerHTML =
-      //TODO possible change to template literal?
-      "Question " + selectedquestionindex + " of " + json.length;
+    descr.innerHTML = `Question ${selectedquestionindex} of ${json.length}`;
   }
+
   //Variables
   const quizContainer = document.getElementById("quiz");
+  const summaryContainer = document.getElementById("summary");
   const resultsContainer = document.getElementById("results");
   const submitButton = document.getElementById("submit");
 
@@ -130,8 +144,6 @@
     Questions("https://www.json-generator.com/api/json/get/cfJMtaNoqG?indent=2")
   );
 
-  console.log(json); 
-
   // display quiz right away
   buildQuiz();
 
@@ -145,7 +157,7 @@
   showSlide(currentSlide);
 
   // Event listeners
-  submitButton.addEventListener("click", showResults);
+  submitButton.addEventListener("click", showResults, setPageNumber);
   previousButton.addEventListener("click", showPreviousSlide);
   nextButton.addEventListener("click", showNextSlide);
 })();
